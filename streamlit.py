@@ -210,9 +210,12 @@ if uploaded_file is not None:
     total_conversations = model_slug_counts['Count'].sum()
     model_slug_counts['Percentage'] = (model_slug_counts['Count'] / total_conversations) * 100
 
-    # Create a treemap
+    # Create a treemap with modified layout settings
     treemap = alt.Chart(model_slug_counts).mark_rect().encode(
-        size='Count:Q',
+        x=alt.X('x:Q', scale=alt.Scale(nice=False), axis=None),
+        y=alt.Y('y:Q', scale=alt.Scale(nice=False), axis=None),
+        x2='x2:Q',
+        y2='y2:Q',
         color=alt.Color('Model Slug:N', scale=alt.Scale(scheme='category20')),
         tooltip=[
             alt.Tooltip('Model Slug:N'),
@@ -220,8 +223,12 @@ if uploaded_file is not None:
             alt.Tooltip('Percentage:Q', format='.1f', title='Percentage (%)')
         ]
     ).transform_window(
-        percent='sum(Count)',
-        frame=[None, None]
+        sort=[alt.SortField('Count', order='descending')],
+        row_number='row_number:O'
+    ).transform_treemap(
+        field='Count',
+        sort={'field': 'Count', 'order': 'descending'},
+        as_=['x', 'y', 'x2', 'y2']
     ).properties(
         width=600,
         height=400,
