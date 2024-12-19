@@ -206,7 +206,7 @@ if uploaded_file is not None:
     })
 
     # Create the doughnut chart for text vs audio conversations
-    text_audio_chart = alt.Chart(conversation_types).mark_arc(innerRadius=50).encode(
+    text_audio_chart = alt.Chart(conversation_types).mark_arc(innerRadius=30).encode(
         theta=alt.Theta(field='Count', type='quantitative'),
         color=alt.Color(field='Type', type='nominal', scale=alt.Scale(domain=['Text', 'Audio'], range=['#1f77b4', '#ff7f0e'])),
         tooltip=['Type', 'Count']
@@ -217,7 +217,7 @@ if uploaded_file is not None:
     model_slug_counts.columns = ['Model Slug', 'Count']
 
     # Create the doughnut chart for conversations by model slug
-    model_slug_chart = alt.Chart(model_slug_counts).mark_arc(innerRadius=50).encode(
+    model_slug_chart = alt.Chart(model_slug_counts).mark_arc(innerRadius=30).encode(
         theta=alt.Theta(field='Count', type='quantitative'),
         color=alt.Color(field='Model Slug', type='nominal', scale=alt.Scale(scheme='category10')),
         tooltip=['Model Slug', 'Count']
