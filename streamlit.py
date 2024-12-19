@@ -85,15 +85,15 @@ if uploaded_file is not None:
     col1, col2, col3 = st.columns(3)
     
     with col1:
-        st.markdown("<span style='font-size: 16px; font-weight: bold;'>Total Conversations</span>", unsafe_allow_html=True)
+        st.markdown("<h2 style='text-align: center; font-weight: bold;'>Total Conversations</h2>", unsafe_allow_html=True)
         st.markdown(f"<h1 style='text-align: center; font-weight: bold;'>{total_chats}</h1>", unsafe_allow_html=True)
     
     with col2:
-        st.markdown("<span style='font-size: 16px; font-weight: bold;'>Avg Messages</span>", unsafe_allow_html=True)
+        st.markdown("<h2 style='text-align: center; font-weight: bold;'>Avg Messages</h2>", unsafe_allow_html=True)
         st.markdown(f"<h1 style='text-align: center; font-weight: bold;'>{avg_messages:.2f}</h1>", unsafe_allow_html=True)
     
     with col3:
-        st.markdown("<span style='font-size: 16px; font-weight: bold;'>Total Audio Messages</span>", unsafe_allow_html=True)
+        st.markdown("<h2 style='text-align: center; font-weight: bold;'>Total Audio Messages</h2>", unsafe_allow_html=True)
         st.markdown(f"<h1 style='text-align: center; font-weight: bold;'>{total_audio_messages}</h1>", unsafe_allow_html=True)
 
     # Plot the bar chart
