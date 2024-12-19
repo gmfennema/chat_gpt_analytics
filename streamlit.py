@@ -70,9 +70,18 @@ if uploaded_file is not None:
     # Process the JSON file
     df = process_json_to_dataframe(uploaded_file)
     
+    # Ensure create_time is in datetime format
+    df['create_time'] = pd.to_datetime(df['create_time'], errors='coerce')  # Convert and coerce errors to NaT
+    
     # Calculate total number of unique conversation IDs for the current year
     current_year = datetime.now().year
     current_year_data = df[df['create_time'].dt.year == current_year]
+    
+    # Check if current_year_data is empty
+    if current_year_data.empty:
+        st.warning("No data available for the current year.")
+        st.stop()  # Stop execution if there's no data for the current year
+    
     total_chats = current_year_data['conversation_id'].nunique()
     
     # Calculate average messages per conversation for the current year
