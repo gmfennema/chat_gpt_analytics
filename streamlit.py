@@ -192,6 +192,40 @@ if uploaded_file is not None:
     st.write("### Monthly Activity")
     plot_conversation_counts_by_month(df)
 
+    # New section for Conversation Types
+    st.write("### Conversation Types")
+
+    # Calculate text vs audio conversations
+    text_conversations = df[df['voice'].isnull()]['conversation_id'].nunique()
+    audio_conversations = df[df['voice'].notnull()]['conversation_id'].nunique()
+
+    # Create a DataFrame for the doughnut chart
+    conversation_types = pd.DataFrame({
+        'Type': ['Text', 'Audio'],
+        'Count': [text_conversations, audio_conversations]
+    })
+
+    # Create the doughnut chart for text vs audio conversations
+    text_audio_chart = alt.Chart(conversation_types).mark_arc(innerRadius=50).encode(
+        theta=alt.Theta(field='Count', type='quantitative'),
+        color=alt.Color(field='Type', type='nominal', scale=alt.Scale(domain=['Text', 'Audio'], range=['#1f77b4', '#ff7f0e'])),
+        tooltip=['Type', 'Count']
+    ).properties(title='Text vs Audio Conversations')
+
+    # Calculate conversations by model slug
+    model_slug_counts = df['default_model_slug'].value_counts().reset_index()
+    model_slug_counts.columns = ['Model Slug', 'Count']
+
+    # Create the doughnut chart for conversations by model slug
+    model_slug_chart = alt.Chart(model_slug_counts).mark_arc(innerRadius=50).encode(
+        theta=alt.Theta(field='Count', type='quantitative'),
+        color=alt.Color(field='Model Slug', type='nominal', scale=alt.Scale(scheme='category10')),
+        tooltip=['Model Slug', 'Count']
+    ).properties(title='Conversations by Model Slug')
+
+    # Display the charts side by side
+    st.altair_chart(text_audio_chart | model_slug_chart, use_container_width=True)
+
     # Paginated table display
     st.write("Paginated Table:")
     st.dataframe(df)
