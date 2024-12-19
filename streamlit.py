@@ -66,6 +66,7 @@ def plot_conversation_counts_by_month(df):
                 sort=['January', 'February', 'March', 'April', 'May', 'June',
                       'July', 'August', 'September', 'October', 'November', 'December']),
         y=alt.Y('conversation_id:Q', title='Number of Conversations'),
+        xOffset='year:N',  # This creates the side-by-side bars
         color=alt.Color('year:N', title='Year'),
         tooltip=['month', 'year', 'conversation_id']
     ).properties(
