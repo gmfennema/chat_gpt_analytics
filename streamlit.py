@@ -195,6 +195,13 @@ if uploaded_file is not None:
     # New section for Conversation Types
     st.write("### Conversation Types")
 
+    # Debug: Show raw data
+    st.write("Debug - Unique model slugs in dataset:", df['default_model_slug'].unique())
+    st.write("Debug - Value counts:", df['default_model_slug'].value_counts())
+
+    # Handle null values and clean the data
+    df['default_model_slug'] = df['default_model_slug'].fillna('Unknown')
+    
     # Calculate conversations by model slug
     model_slug_counts = df['default_model_slug'].value_counts().reset_index()
     model_slug_counts.columns = ['Model Slug', 'Count']
