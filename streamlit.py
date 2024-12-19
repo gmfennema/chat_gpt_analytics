@@ -210,7 +210,7 @@ if uploaded_file is not None:
         theta=alt.Theta(field='Count', type='quantitative'),
         color=alt.Color(field='Type', type='nominal', scale=alt.Scale(domain=['Text', 'Audio'], range=['#1f77b4', '#ff7f0e'])),
         tooltip=['Type', 'Count']
-    ).properties(title='Text vs Audio Conversations')
+    ).properties(title='Text vs Audio Conversations', width=200, height=200)
 
     # Calculate conversations by model slug
     model_slug_counts = df['default_model_slug'].value_counts().reset_index()
@@ -221,7 +221,7 @@ if uploaded_file is not None:
         theta=alt.Theta(field='Count', type='quantitative'),
         color=alt.Color(field='Model Slug', type='nominal', scale=alt.Scale(scheme='category10')),
         tooltip=['Model Slug', 'Count']
-    ).properties(title='Conversations by Model Slug')
+    ).properties(title='Conversations by Model Slug', width=200, height=200)
 
     # Display the charts side by side
     st.altair_chart(text_audio_chart | model_slug_chart, use_container_width=True)
