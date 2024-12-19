@@ -54,8 +54,8 @@ def plot_conversation_counts_by_month(df):
     # Count conversations by month and year
     monthly_counts = df_filtered.groupby(['month', 'year'])['conversation_id'].nunique().reset_index()
     
-    # Check if monthly_counts is empty
-    if len(monthly_counts) == 0:
+    # Check if monthly_counts has data
+    if monthly_counts.empty:
         st.warning("No data available for plotting.")
         return
     
