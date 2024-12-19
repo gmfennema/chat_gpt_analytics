@@ -88,13 +88,16 @@ def plot_activity_heatmap(df, year):
     
     # Create the heatmap
     heatmap = alt.Chart(daily_counts).mark_rect().encode(
-        x=alt.X('week:O', title='Week'),
+        x=alt.X('week:O', 
+                title=None,
+                axis=None),
         y=alt.Y('weekday:O', 
-                title='Day',
+                title=None,
+                axis=None,
                 sort=['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']),
         color=alt.Color('count:Q',
                        scale=alt.Scale(scheme='blues'),
-                       title='Conversations'),
+                       legend=None),
         tooltip=[
             alt.Tooltip('date:T', title='Date'),
             alt.Tooltip('count:Q', title='Conversations')
@@ -180,11 +183,6 @@ if uploaded_file is not None:
                 st.markdown(f"<p style='color: green; text-align: center;'>+{audio_change:.1f}%</p>", unsafe_allow_html=True)
             else:
                 st.markdown(f"<p style='color: red; text-align: center;'>{audio_change:.1f}%</p>", unsafe_allow_html=True)
-
-    # Add this in the main flow after the KPI columns and before the bar chart:
-    st.write("### Daily Activity")
-    activity_heatmap = plot_activity_heatmap(df, current_year)
-    st.altair_chart(activity_heatmap, use_container_width=True)
 
     # Plot the bar chart
     plot_conversation_counts_by_month(df)
