@@ -67,7 +67,10 @@ def plot_conversation_counts_by_month(df):
                       'July', 'August', 'September', 'October', 'November', 'December']),
         y=alt.Y('conversation_id:Q', title='Number of Conversations'),
         xOffset='year:N',  # This creates the side-by-side bars
-        color=alt.Color('year:N', title='Year'),
+        color=alt.Color('year:N', 
+                        title='Year',
+                        scale=alt.Scale(domain=[str(current_year), str(previous_year)],
+                                        range=['#0ea5e9', '#7dd3fc'])),  # Updated colors
         tooltip=['month', 'year', 'conversation_id']
     ).properties(
         title='ChatGPT Year in Review'
