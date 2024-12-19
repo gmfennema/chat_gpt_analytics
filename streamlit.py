@@ -165,7 +165,7 @@ if uploaded_file is not None:
                 st.markdown(f"<p style='color: red; text-align: center;'>{total_chats_change:.1f}%</p>", unsafe_allow_html=True)
     
     with col2:
-        st.markdown("<h6 style='text-align: center;'>Avg Messages per Conversation</h6>", unsafe_allow_html=True)
+        st.markdown("<h6 style='text-align: center;'>Avg Messages/Conversation</h6>", unsafe_allow_html=True)
         st.markdown(f"<h2 style='text-align: center;'>{avg_messages:.1f}</h2>", unsafe_allow_html=True)
         if avg_messages_prev > 0:  # Avoid division by zero
             avg_messages_change = ((avg_messages - avg_messages_prev) / avg_messages_prev * 100)
