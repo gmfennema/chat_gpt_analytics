@@ -38,26 +38,23 @@ def process_json_to_dataframe(json_file):
 
 def plot_conversation_counts_by_month(df):
     # Convert create_time to datetime format and extract month-year
-    df['create_time'] = pd.to_datetime(df['create_time'], errors='coerce')  # Ensure conversion
-    df['month_year'] = df['create_time'].dt.strftime('%Y-%m')  # Format as 'YYYY-MM'
-    df['year'] = df['create_time'].dt.year  # Extract year for comparison
+    df['create_time'] = pd.to_datetime(df['create_time'], errors='coerce')
+    df['month_year'] = df['create_time'].dt.strftime('%Y-%m')
+    df['year'] = df['create_time'].dt.year
     
-    # Count unique conversation_ids by month and year
-    monthly_counts = df.groupby(['month_year', 'year'])['conversation_id'].nunique().unstack(fill_value=0)
+    # Count conversations by month-year and reshape data for Altair
+    monthly_counts = df.groupby(['month_year', 'year'])['conversation_id'].nunique().reset_index()
     
     # Check if monthly_counts is empty
-    if monthly_counts.empty:
+    if len(monthly_counts) == 0:
         st.warning("No data available for plotting.")
-        return  # Exit if there's no data to plot
+        return
     
-    # Reset index to ensure proper formatting for Altair
-    monthly_counts = monthly_counts.reset_index()
-    
-    # Create the Altair bar chart for side-by-side comparison
+    # Create the Altair bar chart
     chart = alt.Chart(monthly_counts).mark_bar().encode(
-        x='month_year:O',
-        y='conversation_id:Q',
-        color='year:N',
+        x=alt.X('month_year:N', title='Month', sort=None),  # 'sort=None' preserves chronological order
+        y=alt.Y('conversation_id:Q', title='Number of Conversations'),
+        color=alt.Color('year:N', title='Year'),
         tooltip=['month_year', 'year', 'conversation_id']
     ).properties(
         title='ChatGPT Year in Review'
