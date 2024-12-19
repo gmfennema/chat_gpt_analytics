@@ -49,10 +49,13 @@ def plot_conversation_counts_by_month(df):
     
     # Extract month name and year
     df_filtered['month'] = df_filtered['create_time'].dt.strftime('%B')
-    df_filtered['year'] = df_filtered['create_time'].dt.year
+    df_filtered['year'] = df_filtered['create_time'].dt.year.astype(str)  # Convert year to string
     
     # Count conversations by month and year
-    monthly_counts = df_filtered.groupby(['month', 'year'])['conversation_id'].nunique().reset_index(name='count')
+    monthly_counts = df_filtered.groupby(['month', 'year']).size().reset_index(name='count')
+    
+    # Debug print
+    st.write("Debug - Monthly Counts:", monthly_counts)
     
     # Check if monthly_counts has data
     if monthly_counts.empty:
@@ -60,22 +63,20 @@ def plot_conversation_counts_by_month(df):
         return
     
     # Create the Altair bar chart
-    chart = alt.Chart(monthly_counts).mark_bar().encode(
+    chart = alt.Chart(monthly_counts).mark_bar(opacity=0.8).encode(
         x=alt.X('month:N', 
                 title='Month',
                 sort=['January', 'February', 'March', 'April', 'May', 'June',
                       'July', 'August', 'September', 'October', 'November', 'December']),
-        y=alt.Y('count:Q', title='Number of Conversations'),
-        xOffset='year:N',  # This creates the side-by-side bars
-        color=alt.Color('year:N', 
-                        title='Year',
-                        scale=alt.Scale(domain=[str(current_year), str(previous_year)],
-                                        range=['#0ea5e9', '#7dd3fc'])),  # Updated colors
-        tooltip=['month', 'year', 'count']
+        y='count:Q',
+        xOffset='year:N',
+        color=alt.Color('year:N',
+                       scale=alt.Scale(domain=[str(current_year), str(previous_year)],
+                                     range=['#0ea5e9', '#7dd3fc']))
     ).properties(
+        width=600,
+        height=400,
         title='ChatGPT Year in Review'
-    ).configure_axis(
-        labelAngle=45
     )
     
     # Display the chart in Streamlit
