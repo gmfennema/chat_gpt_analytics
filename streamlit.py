@@ -156,7 +156,7 @@ if uploaded_file is not None:
     
     with col1:
         st.markdown("<h6 style='text-align: center;'>Total Conversations</h6>", unsafe_allow_html=True)
-        st.markdown(f"<h3 style='text-align: center;'>{total_chats}</h3>", unsafe_allow_html=True)
+        st.markdown(f"<h2 style='text-align: center;'>{total_chats}</h2>", unsafe_allow_html=True)
         if total_chats_prev > 0:  # Avoid division by zero
             total_chats_change = ((total_chats - total_chats_prev) / total_chats_prev * 100)
             if total_chats_change > 0:
@@ -165,8 +165,8 @@ if uploaded_file is not None:
                 st.markdown(f"<p style='color: red; text-align: center;'>{total_chats_change:.1f}%</p>", unsafe_allow_html=True)
     
     with col2:
-        st.markdown("<h6 style='text-align: center;'>Avg Messages</h6>", unsafe_allow_html=True)
-        st.markdown(f"<h3 style='text-align: center;'>{avg_messages:.1f}</h3>", unsafe_allow_html=True)
+        st.markdown("<h6 style='text-align: center;'>Avg Messages per Conversation</h6>", unsafe_allow_html=True)
+        st.markdown(f"<h2 style='text-align: center;'>{avg_messages:.1f}</h2>", unsafe_allow_html=True)
         if avg_messages_prev > 0:  # Avoid division by zero
             avg_messages_change = ((avg_messages - avg_messages_prev) / avg_messages_prev * 100)
             if avg_messages_change > 0:
@@ -176,7 +176,7 @@ if uploaded_file is not None:
     
     with col3:
         st.markdown("<h6 style='text-align: center;'>Total Audio Messages</h6>", unsafe_allow_html=True)
-        st.markdown(f"<h3 style='text-align: center;'>{total_audio_messages}</h3>", unsafe_allow_html=True)
+        st.markdown(f"<h2 style='text-align: center;'>{total_audio_messages}</h2>", unsafe_allow_html=True)
         if total_audio_messages_prev > 0:  # Avoid division by zero
             audio_change = ((total_audio_messages - total_audio_messages_prev) / total_audio_messages_prev * 100)
             if audio_change > 0:
