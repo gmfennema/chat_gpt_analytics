@@ -192,43 +192,6 @@ if uploaded_file is not None:
     st.write("### Monthly Activity")
     plot_conversation_counts_by_month(df)
 
-    # New section for Conversation Types
-    st.write("### Conversation Types")
-
-    # Debug: Show raw data
-    st.write("Debug - Unique model slugs in dataset:", df['default_model_slug'].unique())
-    st.write("Debug - Value counts:", df['default_model_slug'].value_counts())
-
-    # Handle null values and clean the data
-    df['default_model_slug'] = df['default_model_slug'].fillna('Unknown')
-    
-    # Calculate conversations by model slug
-    model_slug_counts = df['default_model_slug'].value_counts().reset_index()
-    model_slug_counts.columns = ['Model Slug', 'Count']
-
-    # Calculate percentage of total conversations
-    total_conversations = model_slug_counts['Count'].sum()
-    model_slug_counts['Percentage'] = (model_slug_counts['Count'] / total_conversations) * 100
-
-    # Create a horizontal bar chart
-    chart = alt.Chart(model_slug_counts).mark_bar().encode(
-        y=alt.Y('Model Slug:N', sort='-x'),
-        x=alt.X('Count:Q', title='Number of Conversations'),
-        color=alt.Color('Model Slug:N', scale=alt.Scale(scheme='category20')),
-        tooltip=[
-            alt.Tooltip('Model Slug:N'),
-            alt.Tooltip('Count:Q', format=','),
-            alt.Tooltip('Percentage:Q', format='.1f', title='Percentage (%)')
-        ]
-    ).properties(
-        width=600,
-        height=400,
-        title='Distribution of Conversations by Model Type'
-    )
-
-    # Display the chart
-    st.altair_chart(chart, use_container_width=True)
-
     # Paginated table display
     st.write("Paginated Table:")
     st.dataframe(df)
