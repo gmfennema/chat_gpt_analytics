@@ -52,7 +52,7 @@ def plot_conversation_counts_by_month(df):
     df_filtered['year'] = df_filtered['create_time'].dt.year
     
     # Count conversations by month and year
-    monthly_counts = df_filtered.groupby(['month', 'year'])['conversation_id'].nunique().reset_index()
+    monthly_counts = df_filtered.groupby(['month', 'year'])['conversation_id'].nunique().reset_index(name='count')
     
     # Check if monthly_counts has data
     if monthly_counts.empty:
@@ -65,13 +65,13 @@ def plot_conversation_counts_by_month(df):
                 title='Month',
                 sort=['January', 'February', 'March', 'April', 'May', 'June',
                       'July', 'August', 'September', 'October', 'November', 'December']),
-        y=alt.Y('conversation_id:Q', title='Number of Conversations'),
+        y=alt.Y('count:Q', title='Number of Conversations'),
         xOffset='year:N',  # This creates the side-by-side bars
         color=alt.Color('year:N', 
                         title='Year',
                         scale=alt.Scale(domain=[str(current_year), str(previous_year)],
                                         range=['#0ea5e9', '#7dd3fc'])),  # Updated colors
-        tooltip=['month', 'year', 'conversation_id']
+        tooltip=['month', 'year', 'count']
     ).properties(
         title='ChatGPT Year in Review'
     ).configure_axis(
