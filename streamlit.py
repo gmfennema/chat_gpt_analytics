@@ -83,8 +83,8 @@ def plot_activity_heatmap(df, year):
     daily_counts.columns = ['date', 'count']
     
     # Add weekday and week number
-    daily_counts['weekday'] = pd.to_datetime(daily_counts['date']).dt.strftime('%a')
-    daily_counts['week'] = pd.to_datetime(daily_counts['date']).dt.strftime('%V')
+    daily_counts['weekday'] = pd.to_datetime(daily_counts['date']).dt.strftime('%A')  # Full weekday name
+    daily_counts['formatted_date'] = pd.to_datetime(daily_counts['date']).dt.strftime('%B %d, %Y')  # Formatted date
     
     # Create the heatmap
     heatmap = alt.Chart(daily_counts).mark_rect().encode(
@@ -94,12 +94,12 @@ def plot_activity_heatmap(df, year):
         y=alt.Y('weekday:O', 
                 title=None,
                 axis=None,
-                sort=['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']),
+                sort=['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']),
         color=alt.Color('count:Q',
                        scale=alt.Scale(scheme='blues'),
                        legend=None),
         tooltip=[
-            alt.Tooltip('date:T', title='Date'),
+            alt.Tooltip('formatted_date:N', title='Date'),  # Use the formatted date
             alt.Tooltip('count:Q', title='Conversations')
         ]
     ).properties(
