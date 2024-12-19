@@ -54,14 +54,6 @@ def plot_conversation_counts_by_month(df):
     # Count conversations by month and year
     monthly_counts = df_filtered.groupby(['month', 'year']).size().reset_index(name='count')
     
-    # Debug print
-    st.write("Debug - Monthly Counts:", monthly_counts)
-    
-    # Check if monthly_counts has data
-    if monthly_counts.empty:
-        st.warning("No data available for plotting.")
-        return
-    
     # Create the Altair bar chart
     chart = alt.Chart(monthly_counts).mark_bar(opacity=0.8).encode(
         x=alt.X('month:N', 
@@ -83,7 +75,7 @@ def plot_conversation_counts_by_month(df):
     st.altair_chart(chart, use_container_width=True)
 
 # Streamlit app
-st.title("JSON to DataFrame and Bar Chart")
+st.title("ChatGPT Year in Review")
 
 # File uploader
 uploaded_file = st.file_uploader("Choose a JSON file", type="json")
