@@ -192,6 +192,39 @@ if uploaded_file is not None:
     st.write("### Monthly Activity")
     plot_conversation_counts_by_month(df)
 
+    # Add model distribution chart
+    st.write("### Model Distribution")
+    
+    # Get current year's model distribution
+    model_counts = current_year_data['default_model_slug'].value_counts().reset_index()
+    model_counts.columns = ['model', 'count']
+    
+    # Calculate percentages
+    total = model_counts['count'].sum()
+    model_counts['percentage'] = (model_counts['count'] / total * 100).round(1)
+    
+    # Create the donut chart
+    donut = alt.Chart(model_counts).mark_arc(innerRadius=50).encode(
+        theta=alt.Theta(field="count", type="quantitative"),
+        color=alt.Color(
+            field="model",
+            type="nominal",
+            scale=alt.Scale(scheme='blues'),
+            legend=alt.Legend(title="Model")
+        ),
+        tooltip=[
+            alt.Tooltip("model:N", title="Model"),
+            alt.Tooltip("count:Q", title="Conversations"),
+            alt.Tooltip("percentage:Q", title="Percentage", format=".1f")
+        ]
+    ).properties(
+        width=400,
+        height=400,
+        title="Distribution of Conversations by Model"
+    )
+    
+    st.altair_chart(donut, use_container_width=True)
+
     # Paginated table display
     st.write("Paginated Table:")
     st.dataframe(df)
