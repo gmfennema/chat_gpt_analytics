@@ -74,11 +74,44 @@ def plot_conversation_counts_by_month(df):
     # Display the chart in Streamlit
     st.altair_chart(chart, use_container_width=True)
 
-# Streamlit app
-st.title("ChatGPT Year in Review")
+def plot_activity_heatmap(df, year):
+    # Filter data for the specified year
+    year_data = df[df['create_time'].dt.year == year]
+    
+    # Create daily counts
+    daily_counts = year_data.groupby(year_data['create_time'].dt.date).size().reset_index()
+    daily_counts.columns = ['date', 'count']
+    
+    # Add weekday and week number
+    daily_counts['weekday'] = pd.to_datetime(daily_counts['date']).dt.strftime('%a')
+    daily_counts['week'] = pd.to_datetime(daily_counts['date']).dt.strftime('%V')
+    
+    # Create the heatmap
+    heatmap = alt.Chart(daily_counts).mark_rect().encode(
+        x=alt.X('week:O', title='Week'),
+        y=alt.Y('weekday:O', 
+                title='Day',
+                sort=['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']),
+        color=alt.Color('count:Q',
+                       scale=alt.Scale(scheme='blues'),
+                       title='Conversations'),
+        tooltip=[
+            alt.Tooltip('date:T', title='Date'),
+            alt.Tooltip('count:Q', title='Conversations')
+        ]
+    ).properties(
+        title=f'Conversation Activity in {year}',
+        width=600,
+        height=200
+    )
+    
+    return heatmap
 
 # File uploader
 uploaded_file = st.file_uploader("Choose a JSON file", type="json")
+
+# Streamlit app
+st.title("ChatGPT Year in Review")
 
 if uploaded_file is not None:
     # Process the JSON file
@@ -147,6 +180,11 @@ if uploaded_file is not None:
                 st.markdown(f"<p style='color: green; text-align: center;'>+{audio_change:.1f}%</p>", unsafe_allow_html=True)
             else:
                 st.markdown(f"<p style='color: red; text-align: center;'>{audio_change:.1f}%</p>", unsafe_allow_html=True)
+
+    # Add this in the main flow after the KPI columns and before the bar chart:
+    st.write("### Daily Activity")
+    activity_heatmap = plot_activity_heatmap(df, current_year)
+    st.altair_chart(activity_heatmap, use_container_width=True)
 
     # Plot the bar chart
     plot_conversation_counts_by_month(df)
