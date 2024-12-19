@@ -50,8 +50,11 @@ def plot_conversation_counts_by_month(df):
         st.warning("No data available for plotting.")
         return  # Exit if there's no data to plot
     
+    # Reset index to ensure proper formatting for Altair
+    monthly_counts = monthly_counts.reset_index()
+    
     # Create the Altair bar chart for side-by-side comparison
-    chart = alt.Chart(monthly_counts.reset_index()).mark_bar().encode(
+    chart = alt.Chart(monthly_counts).mark_bar().encode(
         x='month_year:O',
         y='conversation_id:Q',
         color='year:N',
