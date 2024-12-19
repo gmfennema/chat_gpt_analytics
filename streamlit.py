@@ -224,7 +224,13 @@ if uploaded_file is not None:
     ).properties(title='Conversations by Model Slug', width=200, height=200)
 
     # Display the charts side by side
-    st.altair_chart(text_audio_chart | model_slug_chart, use_container_width=True)
+    col1, col2 = st.columns(2)  # Create two columns for side-by-side display
+
+    with col1:
+        st.altair_chart(text_audio_chart, use_container_width=True)  # Display the first chart
+
+    with col2:
+        st.altair_chart(model_slug_chart, use_container_width=True)  # Display the second chart
 
     # Paginated table display
     st.write("Paginated Table:")
