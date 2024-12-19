@@ -68,7 +68,7 @@ def plot_conversation_counts_by_month(df):
     ).properties(
         width=600,
         height=400,
-        title='ChatGPT Year in Review'
+        title='Number of Conversations by Month vs Previous Year'
     )
     
     # Display the chart in Streamlit
@@ -189,7 +189,7 @@ if uploaded_file is not None:
     activity_heatmap = plot_activity_heatmap(df, current_year)
     st.altair_chart(activity_heatmap, use_container_width=True)
     
-    # Plot the bar chart
+    st.write("### Monthly Activity")
     plot_conversation_counts_by_month(df)
 
     # Paginated table display
