@@ -3,7 +3,6 @@ import pandas as pd
 import json
 from datetime import datetime
 import numpy as np
-import matplotlib.pyplot as plt
 
 def process_json_to_dataframe(json_file):
     # Open and load the JSON file
@@ -45,25 +44,22 @@ def plot_conversation_counts_by_month(df):
     df['default_model_slug'] = df['default_model_slug'].fillna('Unknown')
     
     # Count unique conversation_ids by month-year and default_model_slug
-    monthly_counts = df.groupby(['month_year', 'default_model_slug'])['conversation_id'].nunique().unstack(fill_value=0)
+    monthly_counts = df.groupby(['month_year', 'default_model_slug'])['conversation_id'].nunique().reset_index()
     
     # Create a complete date range from January 2023 to the current month
     all_months = pd.date_range(start='2023-01-01', end=pd.Timestamp.now(), freq='MS').strftime('%Y-%m').tolist()
     
-    # Reindex to ensure all months are included
-    monthly_counts = monthly_counts.reindex(all_months, fill_value=0)
+    # Create a DataFrame for all months
+    all_months_df = pd.DataFrame({'month_year': all_months})
     
-    # Create the bar chart using matplotlib
-    plt.figure(figsize=(10, 6))
-    monthly_counts.plot(kind='bar', stacked=True, colormap='tab10')  # Use a colormap for different colors
-    plt.title('Monthly Conversation Counts by Model Slug')
-    plt.xlabel('Month-Year')
-    plt.ylabel('Number of Conversations')
-    plt.legend(title='Model Slug', bbox_to_anchor=(1.05, 1), loc='upper left')  # Legend outside the plot
-    plt.xticks(rotation=45)
+    # Merge with monthly_counts to ensure all months are included
+    monthly_counts = pd.merge(all_months_df, monthly_counts, on='month_year', how='left').fillna(0)
     
-    # Display the plot in Streamlit
-    st.pyplot(plt)  # Use Streamlit's function to display the matplotlib figure
+    # Calculate total conversation counts per month
+    monthly_counts['total_conversations'] = monthly_counts.groupby('month_year')['conversation_id'].transform('sum')
+    
+    # Create the bar chart using Streamlit's native chart
+    st.bar_chart(monthly_counts.set_index('month_year')['conversation_id'])  # Use Streamlit's bar chart
 
 # Streamlit app
 st.title("JSON to DataFrame and Bar Chart")
