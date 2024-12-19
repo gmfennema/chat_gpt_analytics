@@ -202,16 +202,16 @@ if uploaded_file is not None:
     # Calculate percentage of total conversations
     model_slug_counts['Percentage'] = (model_slug_counts['Count'] / model_slug_counts['Count'].sum()) * 100
 
-    # Create a bar chart for conversations by model slug
-    model_slug_chart = alt.Chart(model_slug_counts).mark_bar().encode(
-        x=alt.X('Model Slug:N', title='Model Slug'),
-        y=alt.Y('Percentage:Q', title='Percentage of Total Conversations'),
-        color=alt.Color('Model Slug:N', scale=alt.Scale(scheme='category10')),
+    # Create a treemap for conversations by model slug
+    treemap_chart = alt.Chart(model_slug_counts).mark_rect().encode(
+        x=alt.X('sum(Percentage):Q', title='Percentage of Total Conversations', stack='zero'),
+        y=alt.Y('Model Slug:N', title='Model Slug'),
+        color=alt.Color('Percentage:Q', scale=alt.Scale(scheme='category10')),
         tooltip=['Model Slug', 'Count', 'Percentage']
     ).properties(title='Conversations by Model Slug (%)', width=600, height=300)
 
-    # Display the chart
-    st.altair_chart(model_slug_chart, use_container_width=True)
+    # Display the treemap
+    st.altair_chart(treemap_chart, use_container_width=True)
 
     # Paginated table display
     st.write("Paginated Table:")
