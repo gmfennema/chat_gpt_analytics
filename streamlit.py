@@ -184,6 +184,11 @@ if uploaded_file is not None:
             else:
                 st.markdown(f"<p style='color: red; text-align: center;'>{audio_change:.1f}%</p>", unsafe_allow_html=True)
 
+
+    st.write("### Daily Activity")
+    activity_heatmap = plot_activity_heatmap(df, current_year)
+    st.altair_chart(activity_heatmap, use_container_width=True)
+    
     # Plot the bar chart
     plot_conversation_counts_by_month(df)
 
