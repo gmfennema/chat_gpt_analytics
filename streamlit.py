@@ -38,12 +38,17 @@ def process_json_to_dataframe(json_file):
 
 def plot_conversation_counts_by_month(df):
     # Convert create_time to datetime format and extract month-year
-    df['create_time'] = pd.to_datetime(df['create_time'])
+    df['create_time'] = pd.to_datetime(df['create_time'], errors='coerce')  # Ensure conversion
     df['month_year'] = df['create_time'].dt.strftime('%Y-%m')  # Format as 'YYYY-MM'
     df['year'] = df['create_time'].dt.year  # Extract year for comparison
     
     # Count unique conversation_ids by month and year
     monthly_counts = df.groupby(['month_year', 'year'])['conversation_id'].nunique().unstack(fill_value=0)
+    
+    # Check if monthly_counts is empty
+    if monthly_counts.empty:
+        st.warning("No data available for plotting.")
+        return  # Exit if there's no data to plot
     
     # Create the Altair bar chart for side-by-side comparison
     chart = alt.Chart(monthly_counts.reset_index()).mark_bar().encode(
