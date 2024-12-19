@@ -223,14 +223,14 @@ if uploaded_file is not None:
         tooltip=['Model Slug', 'Count']
     ).properties(title='Conversations by Model Slug', width=200, height=200)
 
-    # Display the charts side by side
+    # Display the charts side by side with increased height
     col1, col2 = st.columns(2)  # Create two columns for side-by-side display
 
     with col1:
-        st.altair_chart(text_audio_chart, use_container_width=True)  # Display the first chart
+        st.altair_chart(text_audio_chart.properties(height=300), use_container_width=True)  # Increased height
 
     with col2:
-        st.altair_chart(model_slug_chart, use_container_width=True)  # Display the second chart
+        st.altair_chart(model_slug_chart.properties(height=300), use_container_width=True)  # Increased height
 
     # Paginated table display
     st.write("Paginated Table:")
