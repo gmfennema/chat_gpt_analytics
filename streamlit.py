@@ -195,42 +195,23 @@ if uploaded_file is not None:
     # New section for Conversation Types
     st.write("### Conversation Types")
 
-    # Calculate text vs audio conversations
-    text_conversations = df[df['voice'].isnull()]['conversation_id'].nunique()
-    audio_conversations = df[df['voice'].notnull()]['conversation_id'].nunique()
-
-    # Create a DataFrame for the doughnut chart
-    conversation_types = pd.DataFrame({
-        'Type': ['Text', 'Audio'],
-        'Count': [text_conversations, audio_conversations]
-    })
-
-    # Create the doughnut chart for text vs audio conversations
-    text_audio_chart = alt.Chart(conversation_types).mark_arc(innerRadius=30).encode(
-        theta=alt.Theta(field='Count', type='quantitative'),
-        color=alt.Color(field='Type', type='nominal', scale=alt.Scale(domain=['Text', 'Audio'], range=['#1f77b4', '#ff7f0e'])),
-        tooltip=['Type', 'Count']
-    ).properties(title='Text vs Audio Conversations', width=200, height=200)
-
     # Calculate conversations by model slug
     model_slug_counts = df['default_model_slug'].value_counts().reset_index()
     model_slug_counts.columns = ['Model Slug', 'Count']
 
-    # Create the doughnut chart for conversations by model slug
-    model_slug_chart = alt.Chart(model_slug_counts).mark_arc(innerRadius=30).encode(
-        theta=alt.Theta(field='Count', type='quantitative'),
-        color=alt.Color(field='Model Slug', type='nominal', scale=alt.Scale(scheme='category10')),
-        tooltip=['Model Slug', 'Count']
-    ).properties(title='Conversations by Model Slug', width=200, height=200)
+    # Calculate percentage of total conversations
+    model_slug_counts['Percentage'] = (model_slug_counts['Count'] / model_slug_counts['Count'].sum()) * 100
 
-    # Display the charts side by side with increased height
-    col1, col2 = st.columns(2)  # Create two columns for side-by-side display
+    # Create a bar chart for conversations by model slug
+    model_slug_chart = alt.Chart(model_slug_counts).mark_bar().encode(
+        x=alt.X('Model Slug:N', title='Model Slug'),
+        y=alt.Y('Percentage:Q', title='Percentage of Total Conversations'),
+        color=alt.Color('Model Slug:N', scale=alt.Scale(scheme='category10')),
+        tooltip=['Model Slug', 'Count', 'Percentage']
+    ).properties(title='Conversations by Model Slug (%)', width=600, height=300)
 
-    with col1:
-        st.altair_chart(text_audio_chart.properties(height=300), use_container_width=True)  # Increased height
-
-    with col2:
-        st.altair_chart(model_slug_chart.properties(height=300), use_container_width=True)  # Increased height
+    # Display the chart
+    st.altair_chart(model_slug_chart, use_container_width=True)
 
     # Paginated table display
     st.write("Paginated Table:")
