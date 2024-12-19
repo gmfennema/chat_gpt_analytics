@@ -64,7 +64,7 @@ def plot_conversation_counts_by_month(df):
         xOffset='year:N',
         color=alt.Color('year:N',
                        scale=alt.Scale(domain=[str(current_year), str(previous_year)],
-                                     range=['#0ea5e9', '#7dd3fc']))
+                                     range=['#0284c7', '#bae6fd']))
     ).properties(
         width=600,
         height=400,
