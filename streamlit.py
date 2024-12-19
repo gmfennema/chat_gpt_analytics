@@ -222,9 +222,6 @@ if uploaded_file is not None:
             alt.Tooltip('Count:Q', format=','),
             alt.Tooltip('Percentage:Q', format='.1f', title='Percentage (%)')
         ]
-    ).transform_window(
-        sort=[alt.SortField('Count', order='descending')],
-        row_number='row_number:O'
     ).transform_treemap(
         field='Count',
         sort={'field': 'Count', 'order': 'descending'},
