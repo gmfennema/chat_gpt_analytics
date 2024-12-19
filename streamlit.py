@@ -3,6 +3,7 @@ import pandas as pd
 import json
 from datetime import datetime
 import numpy as np
+import altair as alt
 
 def process_json_to_dataframe(json_file):
     # Open and load the JSON file
@@ -46,20 +47,20 @@ def plot_conversation_counts_by_month(df):
     # Count unique conversation_ids by month-year and default_model_slug
     monthly_counts = df.groupby(['month_year', 'default_model_slug'])['conversation_id'].nunique().reset_index()
     
-    # Create a complete date range from January 2023 to the current month
-    all_months = pd.date_range(start='2023-01-01', end=pd.Timestamp.now(), freq='MS').strftime('%Y-%m').tolist()
+    # Create the Altair bar chart
+    chart = alt.Chart(monthly_counts).mark_bar().encode(
+        x='month_year:O',
+        y='conversation_id:Q',
+        color='default_model_slug:N',
+        tooltip=['month_year', 'default_model_slug', 'conversation_id']
+    ).properties(
+        title='Monthly Conversation Counts by Model Slug'
+    ).configure_axis(
+        labelAngle=45
+    )
     
-    # Create a DataFrame for all months
-    all_months_df = pd.DataFrame({'month_year': all_months})
-    
-    # Merge with monthly_counts to ensure all months are included
-    monthly_counts = pd.merge(all_months_df, monthly_counts, on='month_year', how='left').fillna(0)
-    
-    # Calculate total conversation counts per month
-    monthly_counts['total_conversations'] = monthly_counts.groupby('month_year')['conversation_id'].transform('sum')
-    
-    # Create the bar chart using Streamlit's native chart
-    st.bar_chart(monthly_counts.set_index('month_year')['conversation_id'])  # Use Streamlit's bar chart
+    # Display the chart in Streamlit
+    st.altair_chart(chart, use_container_width=True)
 
 # Streamlit app
 st.title("JSON to DataFrame and Bar Chart")
