@@ -37,13 +37,22 @@ def process_json_to_dataframe(json_file):
     return df
 
 def plot_conversation_counts_by_month(df):
-    # Convert create_time to datetime format and extract month-year
+    # Convert create_time to datetime format
     df['create_time'] = pd.to_datetime(df['create_time'], errors='coerce')
-    df['month_year'] = df['create_time'].dt.strftime('%Y-%m')
-    df['year'] = df['create_time'].dt.year
     
-    # Count conversations by month-year and reshape data for Altair
-    monthly_counts = df.groupby(['month_year', 'year'])['conversation_id'].nunique().reset_index()
+    # Get current and previous year
+    current_year = datetime.now().year
+    previous_year = current_year - 1
+    
+    # Filter for only current and previous year
+    df_filtered = df[df['create_time'].dt.year.isin([current_year, previous_year])]
+    
+    # Extract month name and year
+    df_filtered['month'] = df_filtered['create_time'].dt.strftime('%B')
+    df_filtered['year'] = df_filtered['create_time'].dt.year
+    
+    # Count conversations by month and year
+    monthly_counts = df_filtered.groupby(['month', 'year'])['conversation_id'].nunique().reset_index()
     
     # Check if monthly_counts is empty
     if len(monthly_counts) == 0:
@@ -52,10 +61,13 @@ def plot_conversation_counts_by_month(df):
     
     # Create the Altair bar chart
     chart = alt.Chart(monthly_counts).mark_bar().encode(
-        x=alt.X('month_year:N', title='Month', sort=None),  # 'sort=None' preserves chronological order
+        x=alt.X('month:N', 
+                title='Month',
+                sort=['January', 'February', 'March', 'April', 'May', 'June',
+                      'July', 'August', 'September', 'October', 'November', 'December']),
         y=alt.Y('conversation_id:Q', title='Number of Conversations'),
         color=alt.Color('year:N', title='Year'),
-        tooltip=['month_year', 'year', 'conversation_id']
+        tooltip=['month', 'year', 'conversation_id']
     ).properties(
         title='ChatGPT Year in Review'
     ).configure_axis(
@@ -110,28 +122,34 @@ if uploaded_file is not None:
     col1, col2, col3 = st.columns(3)
     
     with col1:
-        st.markdown("<h4 style='text-align: center; font-weight: bold;'>Total Conversations</h4>", unsafe_allow_html=True)
-        st.markdown(f"<h1 style='text-align: center; font-weight: bold;'>{total_chats}</h1>", unsafe_allow_html=True)
-        if total_chats_change > 0:
-            st.markdown(f"<h4 style='color: green;'>+{total_chats_change:.2f}%</h4>", unsafe_allow_html=True)
-        else:
-            st.markdown(f"<h4 style='color: red;'>{total_chats_change:.2f}%</h4>", unsafe_allow_html=True)
+        st.markdown("<h6 style='text-align: center;'>Total Conversations</h6>", unsafe_allow_html=True)
+        st.markdown(f"<h3 style='text-align: center;'>{total_chats}</h3>", unsafe_allow_html=True)
+        if total_chats_prev > 0:  # Avoid division by zero
+            total_chats_change = ((total_chats - total_chats_prev) / total_chats_prev * 100)
+            if total_chats_change > 0:
+                st.markdown(f"<p style='color: green; text-align: center;'>+{total_chats_change:.1f}%</p>", unsafe_allow_html=True)
+            else:
+                st.markdown(f"<p style='color: red; text-align: center;'>{total_chats_change:.1f}%</p>", unsafe_allow_html=True)
     
     with col2:
-        st.markdown("<h4 style='text-align: center; font-weight: bold;'>Avg Messages</h4>", unsafe_allow_html=True)
-        st.markdown(f"<h1 style='text-align: center; font-weight: bold;'>{avg_messages:.2f}</h1>", unsafe_allow_html=True)
-        if avg_messages_change > 0:
-            st.markdown(f"<h4 style='color: green;'>+{avg_messages_change:.2f}%</h4>", unsafe_allow_html=True)
-        else:
-            st.markdown(f"<h4 style='color: red;'>{avg_messages_change:.2f}%</h4>", unsafe_allow_html=True)
+        st.markdown("<h6 style='text-align: center;'>Avg Messages</h6>", unsafe_allow_html=True)
+        st.markdown(f"<h3 style='text-align: center;'>{avg_messages:.1f}</h3>", unsafe_allow_html=True)
+        if avg_messages_prev > 0:  # Avoid division by zero
+            avg_messages_change = ((avg_messages - avg_messages_prev) / avg_messages_prev * 100)
+            if avg_messages_change > 0:
+                st.markdown(f"<p style='color: green; text-align: center;'>+{avg_messages_change:.1f}%</p>", unsafe_allow_html=True)
+            else:
+                st.markdown(f"<p style='color: red; text-align: center;'>{avg_messages_change:.1f}%</p>", unsafe_allow_html=True)
     
     with col3:
-        st.markdown("<h4 style='text-align: center; font-weight: bold;'>Total Audio Messages</h4>", unsafe_allow_html=True)
-        st.markdown(f"<h1 style='text-align: center; font-weight: bold;'>{total_audio_messages}</h1>", unsafe_allow_html=True)
-        if total_audio_messages_change > 0:
-            st.markdown(f"<h4 style='color: green;'>+{total_audio_messages_change:.2f}%</h4>", unsafe_allow_html=True)
-        else:
-            st.markdown(f"<h4 style='color: red;'>{total_audio_messages_change:.2f}%</h4>", unsafe_allow_html=True)
+        st.markdown("<h6 style='text-align: center;'>Total Audio Messages</h6>", unsafe_allow_html=True)
+        st.markdown(f"<h3 style='text-align: center;'>{total_audio_messages}</h3>", unsafe_allow_html=True)
+        if total_audio_messages_prev > 0:  # Avoid division by zero
+            audio_change = ((total_audio_messages - total_audio_messages_prev) / total_audio_messages_prev * 100)
+            if audio_change > 0:
+                st.markdown(f"<p style='color: green; text-align: center;'>+{audio_change:.1f}%</p>", unsafe_allow_html=True)
+            else:
+                st.markdown(f"<p style='color: red; text-align: center;'>{audio_change:.1f}%</p>", unsafe_allow_html=True)
 
     # Plot the bar chart
     plot_conversation_counts_by_month(df)
