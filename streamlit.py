@@ -2,9 +2,6 @@ import streamlit as st
 import pandas as pd
 import json
 from datetime import datetime
-import seaborn as sns
-import matplotlib.pyplot as plt
-import plotly.express as px
 import numpy as np
 
 def process_json_to_dataframe(json_file):
