@@ -123,6 +123,39 @@ def plot_activity_heatmap(df, year):
     
     return heatmap
 
+# Add this function to calculate average messages per conversation by week
+def plot_avg_messages_by_week(df):
+    # Ensure create_time is in datetime format
+    df['create_time'] = pd.to_datetime(df['create_time'], errors='coerce')
+    
+    # Extract week number and year
+    df['week'] = df['create_time'].dt.isocalendar().week
+    df['year'] = df['create_time'].dt.year.astype(str)  # Convert year to string
+    
+    # Group by week and year, then calculate average messages
+    avg_messages_weekly = df.groupby(['year', 'week'])['message_count'].mean().reset_index(name='avg_messages')
+    
+    # Create the area chart
+    area_chart = alt.Chart(avg_messages_weekly).mark_area(opacity=0.5).encode(
+        x=alt.X('week:O', title='Week Number'),
+        y=alt.Y('avg_messages:Q', title='Average Messages per Conversation'),
+        color=alt.Color('year:N', scale=alt.Scale(scheme='blues')),
+        tooltip=[
+            alt.Tooltip('week:O', title='Week Number'),
+            alt.Tooltip('avg_messages:Q', title='Average Messages')
+        ]
+    ).properties(
+        width=600,
+        height=400,
+        title=alt.TitleParams(
+            text='Average Messages per Conversation by Week',
+            anchor='middle',  # Center the title
+            fontSize=16
+        )
+    )
+    
+    return area_chart
+
 # Add this before the file uploader
 if 'file_uploaded' not in st.session_state:
     st.session_state.file_uploaded = False
@@ -342,3 +375,8 @@ if uploaded_file is not None:
     # Replace "Paginated Table:" with styled H2
     st.write("<h2 style='text-align: center; margin-top: 40px;'>Data Being Analyzed</h2>", unsafe_allow_html=True)
     st.dataframe(df)
+
+    # Add this line to display the area chart below the bar chart
+    st.write("<h2 style='text-align: center; margin-top: 40px;'>Average Messages per Conversation by Week</h2>", unsafe_allow_html=True)
+    avg_messages_area_chart = plot_avg_messages_by_week(df)
+    st.altair_chart(avg_messages_area_chart, use_container_width=True)
