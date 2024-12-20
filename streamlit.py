@@ -114,7 +114,7 @@ def plot_activity_heatmap(df, year):
 uploaded_file = st.file_uploader("Choose a JSON file", type="json")
 
 # Streamlit app
-st.markdown("<h1 style='text-align: center;'>ChatGPT Year in Review</h1>", unsafe_allow_html=True)
+st.markdown("<h1 style='text-align: center; margin-bottom: 40px;'>ChatGPT Year in Review</h1>", unsafe_allow_html=True)
 
 if uploaded_file is not None:
     # Process the JSON file
@@ -185,15 +185,15 @@ if uploaded_file is not None:
         """, unsafe_allow_html=True)
 
 
-    st.write("### Daily Activity")
+    st.write("<h2 style='text-align: center; margin-top: 40px;'>Daily Activity</h2>", unsafe_allow_html=True)
     activity_heatmap = plot_activity_heatmap(df, current_year)
     st.altair_chart(activity_heatmap, use_container_width=True)
     
-    st.write("### Monthly Activity")
+    st.write("<h2 style='text-align: center; margin-top: 40px;'>Monthly Activity</h2>", unsafe_allow_html=True)
     plot_conversation_counts_by_month(df)
 
     # Add model distribution chart
-    st.write("### Model Distribution")
+    st.write("<h2 style='text-align: center; margin-top: 40px;'>Model Distribution</h2>", unsafe_allow_html=True)
     
     # Get current year's model distribution
     model_counts = current_year_data['default_model_slug'].value_counts().reset_index()
@@ -226,7 +226,7 @@ if uploaded_file is not None:
     st.altair_chart(donut, use_container_width=True)
 
     # Create word frequency visualization
-    st.write("### Conversation Topics Cloud")
+    st.write("<h2 style='text-align: center; margin-top: 40px;'>Conversation Topics Cloud</h2>", unsafe_allow_html=True)
     
     def get_word_frequencies(titles, min_length=3):
         # Combine all titles and split into words
