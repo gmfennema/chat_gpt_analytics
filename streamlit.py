@@ -123,13 +123,24 @@ def plot_activity_heatmap(df, year):
     
     return heatmap
 
-# File uploader
+# Add this before the file uploader
+if 'file_uploaded' not in st.session_state:
+    st.session_state.file_uploaded = False
+
+if not st.session_state.file_uploaded:
+    st.info("""
+    📊 This app provides yearly statistics for your ChatGPT conversations!
+    
+    🔒 **Privacy Note**: This tool only analyzes metadata (like timestamps and message counts) and conversation titles. 
+    The actual content of your messages is never processed or stored.
+    
+    💡 For transparency, the complete source code is available on [GitHub](https://github.com/gmfennema/chat_gpt_analytics).
+    """)
+
+# Modify the file uploader section
 uploaded_file = st.file_uploader("Choose a JSON file", type="json")
-
-# Streamlit app
-st.markdown("<h1 style='text-align: center; margin-bottom: 40px;'>ChatGPT Year in Review</h1>", unsafe_allow_html=True)
-
 if uploaded_file is not None:
+    st.session_state.file_uploaded = True
     # Process the JSON file
     df = process_json_to_dataframe(uploaded_file)
     
