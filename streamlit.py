@@ -89,12 +89,13 @@ def plot_activity_heatmap(df, year):
     # Add weekday and week number
     daily_counts['weekday'] = pd.to_datetime(daily_counts['date']).dt.strftime('%a')
     daily_counts['week'] = pd.to_datetime(daily_counts['date']).dt.strftime('%V')
+    daily_counts['month'] = pd.to_datetime(daily_counts['date']).dt.strftime('%b')  # Shortened month names
     
     # Create the heatmap
     heatmap = alt.Chart(daily_counts).mark_rect().encode(
         x=alt.X('week:O', 
                 title=None,
-                axis=None),
+                axis=alt.Axis(labels=True, labelAngle=0)),  # Keep labels horizontal
         y=alt.Y('weekday:O', 
                 title=None,
                 axis=None,
@@ -120,7 +121,7 @@ def plot_activity_heatmap(df, year):
         x=alt.X('week:O', 
                 title=None,
                 axis=alt.Axis(labels=True, labelAngle=0)),  # Keep labels horizontal
-        x2=alt.X2('month:N', title='Month', sort=['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'])  # Add shortened month labels
+        text=alt.Text('month:N', title='Month')  # Add shortened month labels as text
     )
     
     return heatmap
