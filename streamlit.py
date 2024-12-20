@@ -155,29 +155,26 @@ if uploaded_file is not None:
     col1, col2, col3 = st.columns(3)
     
     with col1:
-        st.markdown("""
+        st.markdown(f"""
         <div style='border-radius: 5px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); padding: 10px;'>
             <h6 style='text-align: center;'>Total Conversations</h6>
             <h2 style='text-align: center;'>{total_chats}</h2>
-            ...
         </div>
         """, unsafe_allow_html=True)
     
     with col2:
-        st.markdown("""
+        st.markdown(f"""
         <div style='border-radius: 5px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); padding: 10px;'>
             <h6 style='text-align: center;'>Avg Messages/Conversation</h6>
             <h2 style='text-align: center;'>{avg_messages:.1f}</h2>
-            ...
         </div>
         """, unsafe_allow_html=True)
     
     with col3:
-        st.markdown("""
+        st.markdown(f"""
         <div style='border-radius: 5px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); padding: 10px;'>
             <h6 style='text-align: center;'>Total Audio Messages</h6>
             <h2 style='text-align: center;'>{total_audio_messages}</h2>
-            ...
         </div>
         """, unsafe_allow_html=True)
 
