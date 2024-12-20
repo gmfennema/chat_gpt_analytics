@@ -308,8 +308,7 @@ if uploaded_file is not None:
         title=alt.TitleParams(
             text='Most used words in conversation titles',
             anchor='middle',  # Center the title
-            fontSize=16,      # Set font size
-            fontWeight='bold' # Set font weight
+            fontSize=16
         )
     ).configure_view(
         strokeWidth=0
