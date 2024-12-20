@@ -114,7 +114,7 @@ def plot_activity_heatmap(df, year):
 uploaded_file = st.file_uploader("Choose a JSON file", type="json")
 
 # Streamlit app
-st.title("ChatGPT Year in Review")
+st.markdown("<h1 style='text-align: center;'>ChatGPT Year in Review</h1>", unsafe_allow_html=True)
 
 if uploaded_file is not None:
     # Process the JSON file
