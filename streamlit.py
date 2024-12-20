@@ -136,8 +136,6 @@ if not st.session_state.file_uploaded:
     
     💡 For transparency, the complete source code is available on [GitHub](https://github.com/gmfennema/chat_gpt_analytics).
     """)
-
-st.markdown("<h1 style='text-align: center; margin-bottom: 40px;'>ChatGPT Year in Review</h1>", unsafe_allow_html=True)
 # Modify the file uploader section
 uploaded_file = st.file_uploader("Choose a JSON file", type="json")
 if uploaded_file is not None:
@@ -209,7 +207,7 @@ if uploaded_file is not None:
         </div>
         """, unsafe_allow_html=True)
 
-
+    st.markdown("<h1 style='text-align: center; margin-bottom: 40px;'>ChatGPT Year in Review</h1>", unsafe_allow_html=True)
     st.write("<h2 style='text-align: center; margin-top: 40px;'>Daily Activity</h2>", unsafe_allow_html=True)
     activity_heatmap = plot_activity_heatmap(df, current_year)
     st.altair_chart(activity_heatmap, use_container_width=True)
