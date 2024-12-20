@@ -225,6 +225,43 @@ if uploaded_file is not None:
     
     st.altair_chart(donut, use_container_width=True)
 
+    # Create word frequency visualization
+    st.write("### Most Common Conversation Topics")
+    
+    # Process titles to get word frequencies
+    def get_word_frequencies(titles, min_length=3):
+        # Combine all titles and split into words
+        words = ' '.join(titles.dropna().astype(str)).lower().split()
+        # Filter out short words and count frequencies
+        word_freq = pd.Series([w for w in words if len(w) >= min_length]).value_counts()
+        return pd.DataFrame({'word': word_freq.index, 'frequency': word_freq.values})
+    
+    # Get word frequencies for current year
+    word_freq_df = get_word_frequencies(current_year_data['title'])
+    # Take top 30 words
+    top_words = word_freq_df.head(30)
+    
+    # Create word frequency chart
+    word_chart = alt.Chart(top_words).mark_bar().encode(
+        x=alt.X('frequency:Q', title='Frequency'),
+        y=alt.Y('word:N', 
+                title=None,
+                sort='-x'),  # Sort by frequency descending
+        color=alt.Color('frequency:Q',
+                       scale=alt.Scale(scheme='blues'),
+                       legend=None),
+        tooltip=[
+            alt.Tooltip('word:N', title='Word'),
+            alt.Tooltip('frequency:Q', title='Frequency')
+        ]
+    ).properties(
+        width=600,
+        height=400,
+        title='Most Common Words in Conversation Titles'
+    )
+    
+    st.altair_chart(word_chart, use_container_width=True)
+    
     # Paginated table display
     st.write("Paginated Table:")
     st.dataframe(df)
