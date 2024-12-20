@@ -157,27 +157,27 @@ if uploaded_file is not None:
     with col1:
         st.markdown(f"""
         <div style='border-radius: 5px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); padding: 10px;'>
-            <h6 style='text-align: center;'>Total Conversations</h6>
+            <h6 style='text-align: center; font-size: 14px;'>Total Conversations</h6>
             <h2 style='text-align: center;'>{total_chats}</h2>
-            <h6 style='text-align: center; color: {"red" if total_chats_change < 0 else "green"};'>YoY Change: {total_chats_change:.1f}%</h6>
+            <h6 style='text-align: center; color: black;'>YoY Change: <span style='color: {"red" if total_chats_change < 0 else "green"};'>{total_chats_change:.1f}%</span></h6>
         </div>
         """, unsafe_allow_html=True)
     
     with col2:
         st.markdown(f"""
         <div style='border-radius: 5px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); padding: 10px;'>
-            <h6 style='text-align: center;'>Avg Messages/Conversation</h6>
+            <h6 style='text-align: center; font-size: 14px;'>Avg Messages/Conversation</h6>
             <h2 style='text-align: center;'>{avg_messages:.1f}</h2>
-            <h6 style='text-align: center; color: {"red" if avg_messages_change < 0 else "green"};'>YoY Change: {avg_messages_change:.1f}%</h6>
+            <h6 style='text-align: center; color: black;'>YoY Change: <span style='color: {"red" if avg_messages_change < 0 else "green"};'>{avg_messages_change:.1f}%</span></h6>
         </div>
         """, unsafe_allow_html=True)
     
     with col3:
         st.markdown(f"""
         <div style='border-radius: 5px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); padding: 10px;'>
-            <h6 style='text-align: center;'>Total Audio Messages</h6>
+            <h6 style='text-align: center; font-size: 14px;'>Total Audio Messages</h6>
             <h2 style='text-align: center;'>{total_audio_messages}</h2>
-            <h6 style='text-align: center; color: {"red" if total_audio_messages_change < 0 else "green"};'>YoY Change: {total_audio_messages_change:.1f}%</h6>
+            <!-- Removed YoY Change for audio messages -->
         </div>
         """, unsafe_allow_html=True)
 
