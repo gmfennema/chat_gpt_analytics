@@ -129,6 +129,13 @@ if 'file_uploaded' not in st.session_state:
 
 if not st.session_state.file_uploaded:
     st.info("""
+    📊 **How to get your data:**
+    1. Go to ChatGPT Settings → Data Controls → Export Data
+    2. Check your email for the download link
+    3. Upload the `conversations.json` file below
+    """)
+    
+    st.info("""
     📊 This app provides yearly statistics for your ChatGPT conversations!
     
     🔒 **Privacy Note**: This tool only analyzes metadata (like timestamps and message counts) and conversation titles. 
