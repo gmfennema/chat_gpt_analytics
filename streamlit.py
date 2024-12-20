@@ -226,9 +226,8 @@ if uploaded_file is not None:
     st.altair_chart(donut, use_container_width=True)
 
     # Create word frequency visualization
-    st.write("### Most Common Conversation Topics")
+    st.write("### Conversation Topics Cloud")
     
-    # Process titles to get word frequencies
     def get_word_frequencies(titles, min_length=3):
         # Combine all titles and split into words
         words = ' '.join(titles.dropna().astype(str)).lower().split()
@@ -238,15 +237,22 @@ if uploaded_file is not None:
     
     # Get word frequencies for current year
     word_freq_df = get_word_frequencies(current_year_data['title'])
-    # Take top 30 words
-    top_words = word_freq_df.head(30)
+    # Take top 50 words
+    top_words = word_freq_df.head(50)
     
-    # Create word frequency chart
-    word_chart = alt.Chart(top_words).mark_bar().encode(
-        x=alt.X('frequency:Q', title='Frequency'),
-        y=alt.Y('word:N', 
-                title=None,
-                sort='-x'),  # Sort by frequency descending
+    # Add random positions for each word
+    np.random.seed(42)  # For reproducibility
+    top_words['x'] = np.random.uniform(0, 100, len(top_words))
+    top_words['y'] = np.random.uniform(0, 100, len(top_words))
+    
+    # Create word cloud-like visualization
+    word_cloud = alt.Chart(top_words).mark_text(baseline='middle').encode(
+        x=alt.X('x:Q', axis=None),
+        y=alt.Y('y:Q', axis=None),
+        size=alt.Size('frequency:Q', 
+                     scale=alt.Scale(range=[12, 40]),
+                     legend=None),
+        text='word:N',
         color=alt.Color('frequency:Q',
                        scale=alt.Scale(scheme='blues'),
                        legend=None),
@@ -257,10 +263,12 @@ if uploaded_file is not None:
     ).properties(
         width=600,
         height=400,
-        title='Most Common Words in Conversation Titles'
+        title='Conversation Topics Cloud'
+    ).configure_view(
+        strokeWidth=0
     )
     
-    st.altair_chart(word_chart, use_container_width=True)
+    st.altair_chart(word_cloud, use_container_width=True)
     
     # Paginated table display
     st.write("Paginated Table:")
