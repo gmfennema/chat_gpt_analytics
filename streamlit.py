@@ -94,7 +94,7 @@ def plot_activity_heatmap(df, year):
     # Create the heatmap
     heatmap = alt.Chart(daily_counts).mark_rect().encode(
         x=alt.X('week:O', 
-                title=None,
+                title='Week Number',
                 axis=alt.Axis(labels=True, labelAngle=0)),  # Keep labels horizontal
         y=alt.Y('weekday:O', 
                 title=None,
