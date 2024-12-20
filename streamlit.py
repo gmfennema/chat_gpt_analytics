@@ -263,6 +263,12 @@ if uploaded_file is not None:
     st.write("<h2 style='text-align: center; margin-top: 40px;'>Monthly Activity</h2>", unsafe_allow_html=True)
     plot_conversation_counts_by_month(df)
 
+
+    # Add this line to display the area chart below the bar chart
+    st.write("<h2 style='text-align: center; margin-top: 40px;'>Average Messages per Conversation by Week</h2>", unsafe_allow_html=True)
+    avg_messages_area_chart = plot_avg_messages_by_week(df)
+    st.altair_chart(avg_messages_area_chart, use_container_width=True)
+
     # Add model distribution chart
     st.write("<h2 style='text-align: center; margin-top: 40px;'>Model Distribution</h2>", unsafe_allow_html=True)
     
@@ -382,8 +388,3 @@ if uploaded_file is not None:
     # Replace "Paginated Table:" with styled H2
     st.write("<h2 style='text-align: center; margin-top: 40px;'>Data Being Analyzed</h2>", unsafe_allow_html=True)
     st.dataframe(df)
-
-    # Add this line to display the area chart below the bar chart
-    st.write("<h2 style='text-align: center; margin-top: 40px;'>Average Messages per Conversation by Week</h2>", unsafe_allow_html=True)
-    avg_messages_area_chart = plot_avg_messages_by_week(df)
-    st.altair_chart(avg_messages_area_chart, use_container_width=True)
