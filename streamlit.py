@@ -228,12 +228,6 @@ if uploaded_file is not None:
     ).properties(
         width=400,
         height=350,
-        title=alt.TitleParams(
-            text="Distribution of Conversations by Model",
-            anchor='middle',  # Center the title
-            fontSize=16,      # Set font size
-            fontWeight='bold' # Set font weight
-        )
     )
     
     st.altair_chart(donut, use_container_width=True)
