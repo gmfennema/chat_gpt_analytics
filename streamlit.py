@@ -240,12 +240,47 @@ if uploaded_file is not None:
     # Take top 50 words
     top_words = word_freq_df.head(50)
     
-    # Add random positions for each word
-    np.random.seed(42)  # For reproducibility
-    top_words['x'] = np.random.uniform(0, 100, len(top_words))
-    top_words['y'] = np.random.uniform(0, 100, len(top_words))
+    # Function to check if a position is too close to existing positions
+    def is_position_valid(x, y, existing_positions, min_distance=10):
+        for ex_x, ex_y in existing_positions:
+            if np.sqrt((x - ex_x)**2 + (y - ex_y)**2) < min_distance:
+                return False
+        return True
     
-    # Create word cloud-like visualization
+    # Generate positions with collision detection
+    np.random.seed(42)
+    positions = []
+    x_positions = []
+    y_positions = []
+    
+    for _ in range(len(top_words)):
+        max_attempts = 100
+        found_position = False
+        
+        for _ in range(max_attempts):
+            x = np.random.uniform(10, 90)
+            y = np.random.uniform(10, 90)
+            
+            if not positions or is_position_valid(x, y, positions):
+                positions.append((x, y))
+                x_positions.append(x)
+                y_positions.append(y)
+                found_position = True
+                break
+        
+        if not found_position:
+            # If no valid position found, try with a smaller minimum distance
+            x = np.random.uniform(10, 90)
+            y = np.random.uniform(10, 90)
+            positions.append((x, y))
+            x_positions.append(x)
+            y_positions.append(y)
+    
+    # Add positions to dataframe
+    top_words['x'] = x_positions
+    top_words['y'] = y_positions
+    
+    # Create word cloud visualization
     word_cloud = alt.Chart(top_words).mark_text(baseline='middle').encode(
         x=alt.X('x:Q', axis=None),
         y=alt.Y('y:Q', axis=None),
