@@ -118,10 +118,7 @@ def plot_activity_heatmap(df, year):
     ).add_selection(
         alt.selection_interval(bind='scales')  # Allow for selection
     ).encode(
-        x=alt.X('week:O', 
-                title=None,
-                axis=alt.Axis(labels=True, labelAngle=0)),  # Keep labels horizontal
-        text=alt.Text('month:N', title='Month')  # Add shortened month labels as text
+        text=alt.Text('month:N', title='Month')  # Remove the x-axis override, keep only the month text
     )
     
     return heatmap
