@@ -91,8 +91,7 @@ def plot_activity_heatmap(df, year):
     daily_counts['week'] = pd.to_datetime(daily_counts['date']).dt.strftime('%V')
     daily_counts['month'] = pd.to_datetime(daily_counts['date']).dt.strftime('%b')  # Shortened month names
     
-    # Create the heatmap with selection
-    selection = alt.selection_interval(bind='scales')  # Allow for selection
+    # Create the heatmap
     heatmap = alt.Chart(daily_counts).mark_rect().encode(
         x=alt.X('week:O', 
                 title=None,
@@ -116,22 +115,16 @@ def plot_activity_heatmap(df, year):
             anchor='middle',  # Center the title
             fontSize=16
         )
-    ).add_selection(selection)  # Use selection directly here
-    
-    # Create a separate layer for week number labels
-    week_labels = alt.Chart(daily_counts).mark_text(
-        align='center',
-        baseline='top',
-        dy=5  # Adjust vertical position
+    ).add_selection(
+        alt.selection_interval(bind='scales')  # Allow for selection
     ).encode(
-        x='week:O',
-        text='week:N'
+        x=alt.X('week:O', 
+                title=None,
+                axis=alt.Axis(labels=True, labelAngle=0)),  # Keep labels horizontal
+        text=alt.Text('month:N', title='Month')  # Add shortened month labels as text
     )
     
-    # Combine heatmap and week labels
-    combined_chart = heatmap + week_labels
-    
-    return combined_chart
+    return heatmap
 
 # File uploader
 uploaded_file = st.file_uploader("Choose a JSON file", type="json")
