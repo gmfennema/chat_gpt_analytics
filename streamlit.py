@@ -68,7 +68,12 @@ def plot_conversation_counts_by_month(df):
     ).properties(
         width=600,
         height=400,
-        title='Number of Conversations by Month vs Previous Year'
+        title=alt.TitleParams(
+            text='Number of Conversations by Month vs Previous Year',
+            anchor='middle',  # Center the title
+            fontSize=16,      # Optional: Set font size
+            fontWeight='bold' # Optional: Set font weight
+        )
     )
     
     # Display the chart in Streamlit
@@ -103,9 +108,14 @@ def plot_activity_heatmap(df, year):
             alt.Tooltip('count:Q', title='Conversations')
         ]
     ).properties(
-        title=f'Conversation Activity in {year}',
         width=600,
-        height=200
+        height=200,
+        title=alt.TitleParams(
+            text='Daily Activity Heatmap',
+            anchor='middle',  # Center the title
+            fontSize=16,      # Optional: Set font size
+            fontWeight='bold' # Optional: Set font weight
+        )
     )
     
     return heatmap
