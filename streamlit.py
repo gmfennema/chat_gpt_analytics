@@ -132,11 +132,18 @@ def plot_avg_messages_by_week(df):
     df['week'] = df['create_time'].dt.isocalendar().week
     df['year'] = df['create_time'].dt.year.astype(str)  # Convert year to string
     
-    # Group by week and year, then calculate average messages
-    avg_messages_weekly = df.groupby(['year', 'week'])['message_count'].mean().reset_index(name='avg_messages')
+    # Get current and previous year
+    current_year = datetime.now().year
+    previous_year = current_year - 1
     
-    # Create the area chart
-    area_chart = alt.Chart(avg_messages_weekly).mark_area(opacity=0.5).encode(
+    # Filter for only current and previous year
+    df_filtered = df[df['create_time'].dt.year.isin([current_year, previous_year])]
+    
+    # Group by week and year, then calculate average messages
+    avg_messages_weekly = df_filtered.groupby(['year', 'week'])['message_count'].mean().reset_index(name='avg_messages')
+    
+    # Create the area chart with smoothed line
+    area_chart = alt.Chart(avg_messages_weekly).mark_area(interpolate='basis', opacity=0.5).encode(
         x=alt.X('week:O', title='Week Number'),
         y=alt.Y('avg_messages:Q', title='Average Messages per Conversation'),
         color=alt.Color('year:N', scale=alt.Scale(scheme='blues')),
