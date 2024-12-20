@@ -173,11 +173,14 @@ if uploaded_file is not None:
         """, unsafe_allow_html=True)
     
     with col3:
+        # Determine YoY change for audio messages
+        audio_yoy_change = "N/A" if total_audio_messages_prev == 0 else f"{total_audio_messages_change:.1f}%"
+        
         st.markdown(f"""
         <div style='border-radius: 5px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); padding: 10px;'>
-            <h6 style='text-align: center; font-size: 14px;'>Total Audio Messages</h6>
+            <h6 style='text-align: center; font-size: 14px;'>Voice Mode</h6>
             <h2 style='text-align: center;'>{total_audio_messages}</h2>
-            <!-- Removed YoY Change for audio messages -->
+            <h6 style='text-align: center; color: black;'>YoY Change: <span style='color: {"red" if total_audio_messages_change < 0 else "green"};'>{audio_yoy_change}</span></h6>
         </div>
         """, unsafe_allow_html=True)
 
