@@ -109,7 +109,7 @@ def plot_activity_heatmap(df, year):
         ]
     ).properties(
         width=600,
-        height=400,
+        height=250,
         title=alt.TitleParams(
             text='Daily Activity Heatmap',
             anchor='middle',  # Center the title
