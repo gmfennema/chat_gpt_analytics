@@ -135,16 +135,17 @@ def plot_avg_messages_by_week(df):
     # Get current and previous year
     current_year = datetime.now().year
     
+    # Filter for only current and previous year
     df_filtered = df[df['create_time'].dt.year.isin([current_year])]
     
     # Group by week and year, then calculate average messages
     avg_messages_weekly = df_filtered.groupby(['year', 'week'])['message_count'].mean().reset_index(name='avg_messages')
     
-    # Create the area chart with smoothed line
+    # Create the area chart with smoothed line and no legend
     area_chart = alt.Chart(avg_messages_weekly).mark_area(interpolate='basis', opacity=0.5).encode(
         x=alt.X('week:O', title='Week Number'),
         y=alt.Y('avg_messages:Q', title='Average Messages per Conversation'),
-        color=alt.Color('year:N', scale=alt.Scale(scheme='blues')),
+        color=alt.Color('year:N', scale=alt.Scale(scheme='blues'), legend=None),  # Remove legend
         tooltip=[
             alt.Tooltip('week:O', title='Week Number'),
             alt.Tooltip('avg_messages:Q', title='Average Messages')
@@ -263,7 +264,7 @@ if uploaded_file is not None:
 
 
     # Add this line to display the area chart below the bar chart
-    st.write("<h2 style='text-align: center; margin-top: 40px;'>Conversation Length over Time</h2>", unsafe_allow_html=True)
+    st.write("<h2 style='text-align: center; margin-top: 40px;'>Conversation Length Over Time</h2>", unsafe_allow_html=True)
     avg_messages_area_chart = plot_avg_messages_by_week(df)
     st.altair_chart(avg_messages_area_chart, use_container_width=True)
 
