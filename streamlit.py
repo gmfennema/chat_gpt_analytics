@@ -114,6 +114,13 @@ def plot_activity_heatmap(df, year):
             anchor='middle',  # Center the title
             fontSize=16
         )
+    ).add_selection(
+        alt.selection_interval(bind='scales')  # Allow for selection
+    ).encode(
+        x=alt.X('week:O', 
+                title=None,
+                axis=alt.Axis(labels=True, labelAngle=0)),  # Keep labels horizontal
+        x2=alt.X2('month:N', title='Month', sort=['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'])  # Add shortened month labels
     )
     
     return heatmap
