@@ -134,10 +134,8 @@ def plot_avg_messages_by_week(df):
     
     # Get current and previous year
     current_year = datetime.now().year
-    previous_year = current_year - 1
     
-    # Filter for only current and previous year
-    df_filtered = df[df['create_time'].dt.year.isin([current_year, previous_year])]
+    df_filtered = df[df['create_time'].dt.year.isin([current_year])]
     
     # Group by week and year, then calculate average messages
     avg_messages_weekly = df_filtered.groupby(['year', 'week'])['message_count'].mean().reset_index(name='avg_messages')
@@ -265,7 +263,7 @@ if uploaded_file is not None:
 
 
     # Add this line to display the area chart below the bar chart
-    st.write("<h2 style='text-align: center; margin-top: 40px;'>Average Messages per Conversation by Week</h2>", unsafe_allow_html=True)
+    st.write("<h2 style='text-align: center; margin-top: 40px;'>Conversation Length over Time</h2>", unsafe_allow_html=True)
     avg_messages_area_chart = plot_avg_messages_by_week(df)
     st.altair_chart(avg_messages_area_chart, use_container_width=True)
 
