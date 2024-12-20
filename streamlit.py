@@ -219,7 +219,7 @@ if uploaded_file is not None:
         ]
     ).properties(
         width=400,
-        height=400,
+        height=350,
         title="Distribution of Conversations by Model"
     )
     
@@ -298,7 +298,7 @@ if uploaded_file is not None:
     ).properties(
         width=600,
         height=400,
-        title='Conversation Topics Cloud'
+        title='Most used words in conversation titles'
     ).configure_view(
         strokeWidth=0
     )
