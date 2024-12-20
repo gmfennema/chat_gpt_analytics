@@ -71,8 +71,7 @@ def plot_conversation_counts_by_month(df):
         title=alt.TitleParams(
             text='Number of Conversations by Month vs Previous Year',
             anchor='middle',  # Center the title
-            fontSize=16,      # Optional: Set font size
-            fontWeight='500' # Optional: Set font weight
+            fontSize=16
         )
     )
     
@@ -113,8 +112,7 @@ def plot_activity_heatmap(df, year):
         title=alt.TitleParams(
             text='Daily Activity Heatmap',
             anchor='middle',  # Center the title
-            fontSize=16,      # Optional: Set font size
-            fontWeight='500' # Optional: Set font weight
+            fontSize=16
         )
     )
     
@@ -232,8 +230,7 @@ if uploaded_file is not None:
         height=350,
         title="Distribution of Conversations by Model",
         anchor='middle',  # Center the title
-        fontSize=16,      # Optional: Set font size
-        fontWeight='500' # Optional: Set font weight
+        fontSize=16
     )
     
     st.altair_chart(donut, use_container_width=True)
@@ -313,8 +310,7 @@ if uploaded_file is not None:
         height=400,
         title='Most used words in conversation titles',
         anchor='middle',  # Center the title
-        fontSize=16,      # Optional: Set font size
-        fontWeight='500' # Optional: Set font weight
+        fontSize=16
     ).configure_view(
         strokeWidth=0
     )
