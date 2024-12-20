@@ -332,6 +332,6 @@ if uploaded_file is not None:
     
     st.altair_chart(word_cloud, use_container_width=True)
     
-    # Paginated table display
-    st.write("Paginated Table:")
+    # Replace "Paginated Table:" with styled H2
+    st.write("<h2 style='text-align: center; margin-top: 40px;'>Data Being Analyzed</h2>", unsafe_allow_html=True)
     st.dataframe(df)
