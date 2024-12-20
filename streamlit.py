@@ -139,6 +139,8 @@ if not st.session_state.file_uploaded:
 # Modify the file uploader section
 uploaded_file = st.file_uploader("Choose a JSON file", type="json")
 if uploaded_file is not None:
+    
+    st.markdown("<h1 style='text-align: center; margin-bottom: 40px;'>ChatGPT Year in Review</h1>", unsafe_allow_html=True)
     st.session_state.file_uploaded = True
     # Process the JSON file
     df = process_json_to_dataframe(uploaded_file)
@@ -207,7 +209,6 @@ if uploaded_file is not None:
         </div>
         """, unsafe_allow_html=True)
 
-    st.markdown("<h1 style='text-align: center; margin-bottom: 40px;'>ChatGPT Year in Review</h1>", unsafe_allow_html=True)
     st.write("<h2 style='text-align: center; margin-top: 40px;'>Daily Activity</h2>", unsafe_allow_html=True)
     activity_heatmap = plot_activity_heatmap(df, current_year)
     st.altair_chart(activity_heatmap, use_container_width=True)
