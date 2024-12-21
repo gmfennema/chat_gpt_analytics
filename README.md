@@ -12,8 +12,7 @@ A Streamlit web app that generates beautiful visualizations from your ChatGPT co
 🔒 **Privacy First**: This tool only processes metadata and conversation titles. Message content is never analyzed or stored.
 
 ## Demo
-
-
+![ChatGPT Analytics Demo](https://github.com/gmfennema/chat_gpt_analytics/blob/main/GPT_Analytics_Demo.gif)
 
 ## How to Use
 
