@@ -20,5 +20,3 @@ A Streamlit web app that generates beautiful visualizations from your ChatGPT co
 2. Check your email for the download link
 3. Visit the app and upload your `conversations.json` file
 4. Explore your personalized ChatGPT analytics!
-
-## Running Locally
